@@ -1,0 +1,148 @@
+# =========================
+# Python
+# =========================
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Distribution / packaging
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+pip-wheel-metadata/
+
+# =========================
+# Virtual environments
+# =========================
+venv/
+.env/
+.env.*
+.venv/
+ENV/
+env/
+venv.bak/
+venv_old/
+
+# =========================
+# Flask
+# =========================
+instance/
+.webassets-cache
+
+# =========================
+# Logs
+# =========================
+*.log
+logs/
+gunicorn.log
+gunicorn-error.log
+
+# =========================
+# Environment variables
+# =========================
+.env
+.env.local
+.env.production
+.env.development
+
+# =========================
+# Database
+# =========================
+*.sqlite
+*.sqlite3
+*.db
+
+# =========================
+# Docker
+# =========================
+docker-compose.override.yml
+docker-compose.local.yml
+*.pid
+*.seed
+*.pid.lock
+
+# Docker volumes / data
+docker-data/
+volumes/
+
+# =========================
+# Testing / coverage
+# =========================
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+.nox/
+.pytest_cache/
+.cache
+
+# =========================
+# Type check / lint
+# =========================
+.mypy_cache/
+.dmypy.json
+.pyre/
+.ruff_cache/
+
+# =========================
+# IDE
+# =========================
+
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+*.iml
+
+# =========================
+# OS files
+# =========================
+
+# macOS
+.DS_Store
+
+# Linux
+*~
+
+# =========================
+# Node (si frontend intégré)
+# =========================
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# =========================
+# Secrets
+# =========================
+secrets/
+*.pem
+*.key
+*.crt
+
+# =========================
+# Hooks files
+# =========================
+.commits
+commit_analysis.json
+commit_llm_analysis.json
+project_context.json
+
+# =========================
+# Script files
+# =========================
+scripts
+cookies.json
+chrome_profile

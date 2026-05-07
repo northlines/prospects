@@ -1,0 +1,49 @@
+name: Publish Docker image
+
+on:
+  push:
+    branches:
+      - "**"
+    tags:
+      - "v*.*.*"
+
+jobs:
+  push_to_registry:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: northlines/prospects
+          tags: |
+            # dev → pour tous les pushes sur branches
+            type=raw,value=dev,enable=${{ github.ref_type == 'branch' }}
+
+            # version → uniquement si tag git (ex: v1.2.3)
+            type=ref,event=tag
+
+            # latest → uniquement si tag git
+            type=raw,value=latest,enable=${{ github.ref_type == 'tag' }}
+
+      - name: Login Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build & Push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./Dockerfile
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
