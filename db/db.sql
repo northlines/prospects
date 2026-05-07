@@ -53,6 +53,7 @@ CREATE TABLE campaign (
 
     name TEXT,
     template TEXT,
+    subject TEXT,
     
     created_at TIMESTAMP DEFAULT NOW()
 );

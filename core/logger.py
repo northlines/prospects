@@ -120,7 +120,7 @@ def create_handler(filename, level, min_level=None, max_level=None):
 
     handler.setLevel(level)
     
-    if level == Config.COST_LEVEL:
+    if hasattr(Config, "COST_LEVEL") and level == Config.COST_LEVEL:
         handler.setFormatter(CostFormatter())
     else:
         handler.setFormatter(JsonFormatter())
@@ -133,25 +133,25 @@ def create_handler(filename, level, min_level=None, max_level=None):
     return handler
 
 def cost(self, message, *args, **kwargs):
-    if Config.COST_LEVEL and self.isEnabledFor(Config.COST_LEVEL):
+    if hasattr(Config, "COST_LEVEL") and self.isEnabledFor(Config.COST_LEVEL):
         self._log(Config.COST_LEVEL, message, args, **kwargs)
 
 def metrics(self, message, *args, **kwargs):
-    if Config.METRICS_LEVEL and self.isEnabledFor(Config.METRICS_LEVEL):
+    if hasattr(Config, "METRICS_LEVEL") and self.isEnabledFor(Config.METRICS_LEVEL):
         self._log(Config.METRICS_LEVEL, message, args, **kwargs)
 
 def get_logger():
     logger = logging.getLogger("alpy")
     console_handler = logging.StreamHandler(sys.stdout)
 
-    if Config.COST_LEVEL:
+    if hasattr(Config, "COST_LEVEL"):
         logging.Logger.cost = cost
         logging.addLevelName(Config.COST_LEVEL, "COST")
         console_handler.setLevel(Config.COST_LEVEL)
     else:
         console_handler.setLevel(logging.DEBUG)
 
-    if Config.METRICS_LEVEL:
+    if hasattr(Config, "METRICS_LEVEL"):
         logging.Logger.metrics = metrics
         logging.addLevelName(Config.METRICS_LEVEL, "METRICS")
     else:
@@ -164,7 +164,7 @@ def get_logger():
     console_handler.setFormatter(ConsoleFormatter())
 
     if Config.APP_ENV == 'local' or Config.APP_ENV == 'dev':
-        if Config.COST_LEVEL:
+        if hasattr(Config, "COST_LEVEL"):
             console_handler.addFilter(LevelFilter(Config.COST_LEVEL, logging.CRITICAL))
         else:
             console_handler.addFilter(LevelFilter(Config.DEBUG, logging.CRITICAL))
@@ -175,7 +175,7 @@ def get_logger():
 
     print(f"LOG FILE : {Config.LOG_DIR}/{Config.SERVICE_NAME}.cost.log")
 
-    if Config.COST_LEVEL:
+    if hasattr(Config, "COST_LEVEL"):
         logger.addHandler(
             create_handler(
                 f"{Config.SERVICE_NAME}.cost.log",
@@ -185,7 +185,7 @@ def get_logger():
             )
         )
 
-    if Config.METRICS_LEVEL:
+    if hasattr(Config, "METRICS_LEVEL"):
         logger.addHandler(
             create_handler(
                 f"{Config.SERVICE_NAME}.metrics.log",
