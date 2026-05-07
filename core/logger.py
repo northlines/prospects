@@ -163,7 +163,7 @@ def get_logger():
 
     console_handler.setFormatter(ConsoleFormatter())
 
-    if Config.APP_ENV == 'local' or Config.APP_ENV == 'dev':
+    if hasattr(Config, "APP_ENV") and (Config.APP_ENV == 'local' or Config.APP_ENV == 'dev'):
         if hasattr(Config, "COST_LEVEL"):
             console_handler.addFilter(LevelFilter(Config.COST_LEVEL, logging.CRITICAL))
         else:
