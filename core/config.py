@@ -14,6 +14,7 @@ class Config:
     DB_PASSWORD = config.get("POSTGRES_PASSWORD")
     DB_HOST = config.get("PSQL_HOST")
     DB_PORT = config.get("PSQL_PORT")
+    BREVO_KEY = config.get("BREVO_API")
     
     SECRET_KEY = config.get("SECRET_KEY")
 

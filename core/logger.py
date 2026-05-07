@@ -133,31 +133,41 @@ def create_handler(filename, level, min_level=None, max_level=None):
     return handler
 
 def cost(self, message, *args, **kwargs):
-    if self.isEnabledFor(Config.COST_LEVEL):
+    if Config.COST_LEVEL and self.isEnabledFor(Config.COST_LEVEL):
         self._log(Config.COST_LEVEL, message, args, **kwargs)
 
 def metrics(self, message, *args, **kwargs):
-    if self.isEnabledFor(Config.METRICS_LEVEL):
+    if Config.METRICS_LEVEL and self.isEnabledFor(Config.METRICS_LEVEL):
         self._log(Config.METRICS_LEVEL, message, args, **kwargs)
 
 def get_logger():
     logger = logging.getLogger("alpy")
-    logging.Logger.cost = cost
-    logging.Logger.metrics = metrics
-    logging.addLevelName(Config.COST_LEVEL, "COST")
-    logging.addLevelName(Config.METRICS_LEVEL, "METRICS")
+    console_handler = logging.StreamHandler(sys.stdout)
+
+    if Config.COST_LEVEL:
+        logging.Logger.cost = cost
+        logging.addLevelName(Config.COST_LEVEL, "COST")
+        console_handler.setLevel(Config.COST_LEVEL)
+    else:
+        console_handler.setLevel(logging.DEBUG)
+
+    if Config.METRICS_LEVEL:
+        logging.Logger.metrics = metrics
+        logging.addLevelName(Config.METRICS_LEVEL, "METRICS")
+    else:
+        logger.setLevel(logging.DEBUG)
 
     if logger.handlers:
         return logger
 
-    logger.setLevel(Config.METRICS_LEVEL)
 
-    console_handler = logging.StreamHandler(sys.stdout)
-    console_handler.setLevel(Config.COST_LEVEL)
     console_handler.setFormatter(ConsoleFormatter())
 
     if Config.APP_ENV == 'local' or Config.APP_ENV == 'dev':
-        console_handler.addFilter(LevelFilter(Config.COST_LEVEL, logging.CRITICAL))
+        if Config.COST_LEVEL:
+            console_handler.addFilter(LevelFilter(Config.COST_LEVEL, logging.CRITICAL))
+        else:
+            console_handler.addFilter(LevelFilter(Config.DEBUG, logging.CRITICAL))
     else:
         console_handler.addFilter(LevelFilter(logging.DEBUG, logging.DEBUG))
 
@@ -165,23 +175,25 @@ def get_logger():
 
     print(f"LOG FILE : {Config.LOG_DIR}/{Config.SERVICE_NAME}.cost.log")
 
-    logger.addHandler(
-        create_handler(
-            f"{Config.SERVICE_NAME}.cost.log",
-            Config.COST_LEVEL,
-            Config.COST_LEVEL,
-            Config.COST_LEVEL
+    if Config.COST_LEVEL:
+        logger.addHandler(
+            create_handler(
+                f"{Config.SERVICE_NAME}.cost.log",
+                Config.COST_LEVEL,
+                Config.COST_LEVEL,
+                Config.COST_LEVEL
+            )
         )
-    )
 
-    logger.addHandler(
-        create_handler(
-            f"{Config.SERVICE_NAME}.metrics.log",
-            Config.METRICS_LEVEL,
-            Config.METRICS_LEVEL,
-            Config.METRICS_LEVEL
+    if Config.METRICS_LEVEL:
+        logger.addHandler(
+            create_handler(
+                f"{Config.SERVICE_NAME}.metrics.log",
+                Config.METRICS_LEVEL,
+                Config.METRICS_LEVEL,
+                Config.METRICS_LEVEL
+            )
         )
-    )
 
     logger.addHandler(
         create_handler(

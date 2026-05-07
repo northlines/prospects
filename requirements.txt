@@ -18,3 +18,4 @@ passlib[argon2]==1.7.4
 argon2-cffi>=23.1
 
 dotenv
+sib-api-v3-sdk

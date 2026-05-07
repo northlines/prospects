@@ -11,8 +11,8 @@ from uuid import UUID
 class Emails(BaseModel):
     id: Optional[UUID] = None
     
-    prospect_id: UUID
-    campaign_id: UUID
+    prospect_id: Optional[UUID] = None
+    campaign_id: Optional[UUID] = None
 
     to_addr: str
     from_addr: str
