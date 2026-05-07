@@ -145,14 +145,15 @@ def get_logger():
     console_handler = logging.StreamHandler(sys.stdout)
 
     if hasattr(Config, "COST_LEVEL"):
-        logging.Logger.cost = cost
         logging.addLevelName(Config.COST_LEVEL, "COST")
         console_handler.setLevel(Config.COST_LEVEL)
     else:
         console_handler.setLevel(logging.DEBUG)
 
+    logging.Logger.cost = cost
+    logging.Logger.metrics = metrics
+
     if hasattr(Config, "METRICS_LEVEL"):
-        logging.Logger.metrics = metrics
         logging.addLevelName(Config.METRICS_LEVEL, "METRICS")
     else:
         logger.setLevel(logging.DEBUG)
