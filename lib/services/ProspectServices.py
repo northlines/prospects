@@ -22,3 +22,8 @@ class ProspectsServices:
         with db_session() as session:
             p = ProspectsRepository.getProspect(session, id)
             return p
+    
+    def unsubscribe(id:UUID, unsubscribe: bool = True) -> Prospects:
+        with db_session() as session:
+            p = ProspectsRepository.setProspectUnsubscribed(session, id, unsubscribe)
+            return p

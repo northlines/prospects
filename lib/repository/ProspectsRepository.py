@@ -53,3 +53,32 @@ class ProspectsRepository:
             )
 
         return Prospects.model_validate(row)
+    
+    @staticmethod
+    def setProspectUnsubscribed(
+        session,
+        id: UUID,
+        unsubscribed: bool
+    ) -> Prospects:
+
+        stmt = (
+            update(prospects)
+            .where(prospects.c.id == id)
+            .values(
+                unsubscribed=unsubscribed
+            )
+            .returning(*prospects.c)
+        )
+
+        row = session.execute(stmt).mappings().first()
+
+        if not row:
+            raise AppException(
+                message=f'Prospect ({id}) does not exist',
+                code="PROSPECT_NOT_FOUND",
+                status=404
+            )
+
+        session.commit()
+
+        return Prospects.model_validate(row)

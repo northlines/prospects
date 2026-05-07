@@ -11,6 +11,8 @@ from core.config import Config
 from core.exceptions import AppException
 from lib.services.EmailServices import EmailServices
 from lib.services.EventServices import EventServices
+from lib.services.ProspectServices import ProspectsServices
+
 from lib.objects.Events import Events
 
 class webhookView():
@@ -31,6 +33,9 @@ class webhookView():
             event_type = event,
             metadata = data
         )
+
+        if event == 'unsubscribed':
+            ProspectsServices.unsubscribe(email.prospect_id, True)
 
         e = EventServices.register(event)
 
