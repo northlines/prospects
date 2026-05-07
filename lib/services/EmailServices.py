@@ -20,5 +20,5 @@ class EmailServices:
     @staticmethod
     def getByBrevoId(brevo_id:str) -> Emails:
         with db_session() as session:
-            p = EmailRepository.getByBrevoId(brevo_id)
+            p = EmailRepository.getByBrevoId(session, brevo_id)
             return p
